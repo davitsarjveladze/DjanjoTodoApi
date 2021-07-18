@@ -7,7 +7,7 @@ from .models import Todos
 
 def todos(request):
     return_array = list()
-    todolist = Todos.objects.all()
+    todolist = Todos.objects.order_by('order')
     for todo in todolist:
         item = {'id': todo.pk,
                 'title': todo.title,
@@ -29,8 +29,11 @@ def insert(request):
 
 
 def update(request):
+    status = False
+    if request.GET['status'] == 'true':
+        status = True
     todo = Todos(title=request.GET['title'],
-                 status=request.GET['status'],
+                 status=status,
                  id=request.GET['id'],
                  order=request.GET['order'])
     todo.save()
